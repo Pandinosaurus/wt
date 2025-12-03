@@ -1772,6 +1772,39 @@ if (!window._$_WT_CLASS_$_) {
     };
 
     /*
+     * Computes the intersection rectangle beteween the element and the
+     * window.
+     *
+     * Returns null if the element is not visible in the window.
+     */
+    this.getVisibleRectangle = function(el) {
+      const topLeft = WT.widgetPageCoordinates(el);
+      const height = el.clientHeight;
+      const width = el.clientWidth;
+
+      const windowSize = WT.windowSize();
+
+      // left
+      const x = Math.max(0, topLeft.x);
+      // top
+      const y = Math.max(0, topLeft.y);
+
+      // right
+      const r = Math.min(topLeft.x + width, windowSize.x);
+      // bottom
+      const b = Math.min(topLeft.y + height, windowSize.y);
+
+      const w = r - x;
+      const h = b - y;
+
+      if (w <= 0 || h <= 0) {
+        return null;
+      }
+
+      return { x: x, y: y, width: w, height: h };
+    };
+
+    /*
      * position right to (x) or left from (rightx) and
      * bottom of (y) or top from (bottomy)
      */
@@ -1786,9 +1819,24 @@ if (!window._$_WT_CLASS_$_) {
         reserveHeight = e.offsetHeight,
         hside,
         vside;
-      const windowSize = WT.windowSize(),
+
+      let windowSize = WT.windowSize(),
         windowX = document.body.scrollLeft + document.documentElement.scrollLeft,
         windowY = document.body.scrollTop + document.documentElement.scrollTop;
+
+      const parent = e.parentNode;
+      if (
+        parent &&
+        !WT.hasTag(parent, "BODY") &&
+        !parent.classList.contains("Wt-domRoot")
+      ) {
+        const visibleRect = WT.getVisibleRectangle(parent);
+        if (visibleRect) {
+          windowSize = { x: visibleRect.width, y: visibleRect.height };
+          windowX = visibleRect.x;
+          windowY = visibleRect.y;
+        }
+      }
 
       /*
        * Should really distinguish between static versus dynamic: for a
