@@ -1900,10 +1900,10 @@ public:
   void setFavicon(std::unique_ptr<WFavicon> icon);
 
   /*! \brief Returns the favicon of this application.
-   * 
+   *
    * Returns the last favicon set to this application using
    * setFavicon().
-   * 
+   *
    * \sa setFavicon()
    */
   WFavicon *favicon() const;
