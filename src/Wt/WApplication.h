@@ -2064,7 +2064,7 @@ public:
   /*! \brief Returns the widget that has focus.
    *
    * This returns the widget that has focus, or \c nullptr if no
-   * widget has focus.
+   * widget has focus or if the focused widget has been deleted.
    *
    * \sa focus(), WWebWidget::focussed(), WWebWidget::setFocus()
    */
