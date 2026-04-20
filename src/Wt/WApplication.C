@@ -822,6 +822,16 @@ WWidget *WApplication::findWidget(const std::string& name)
   return result;
 }
 
+WWidget* WApplication::findById(const std::string& id) const
+{
+  WWidget *result = domRoot_->findById(id);
+  if (!result && domRoot2_) {
+    result = domRoot2_->findById(id);
+  }
+
+  return result;
+}
+
 void WApplication::doUnload()
 {
   if (session_->suspended())
@@ -1171,9 +1181,9 @@ EventSignal<>& WApplication::globalEscapePressed()
 
 void WApplication::setAsFocus(const std::string& id)
 {
-  if (!root() || beingDeleted_)
+  if (beingDeleted_)
     return;
-  WWidget* w = root()->findById(id);
+  WWidget* w = findById(id);
   if (w) {
     w->setFocus();
   }
@@ -1995,7 +2005,7 @@ void WApplication::setFocusedWidget(WWidget *widget)
 WWidget* WApplication::focusedWidget() const
 {
   if (!focusedWidget_|| focusedWidget_->id() != focusId_) {
-    focusedWidget_.reset(focusId_.empty() ? nullptr : root()->findById(focusId_));
+    focusedWidget_.reset(focusId_.empty() ? nullptr : findById(focusId_));
   }
 
   return focusedWidget_.get();

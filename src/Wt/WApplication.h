@@ -306,6 +306,17 @@ public:
    */
   WWidget *findWidget(const std::string& name);
 
+  /*! \brief Finds a widget by id.
+   *
+   * This finds a widget in the application's widget hierarchy. It
+   * does not only consider widgets in the root(), but also widgets
+   * that are placed outside this root, such as in dialogs, or other
+   * "roots" such as all the bound widgets in a widgetset application.
+   *
+   * \sa WWidget::id(), WWidget::findById()
+   */
+  WWidget* findById(const std::string& id) const;
+
   /** @name Style sheets and CSS
    */
   //!@{
