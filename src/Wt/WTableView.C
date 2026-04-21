@@ -89,6 +89,11 @@ void WTableView::setup()
   WApplication *app = WApplication::instance();
 
   if (app->environment().ajax()) {
+    if (!app->styleSheet().isDefined("Wt-hide-scrollbar")) {
+      // We don't want this to be modified by the theme
+      app->styleSheet().addRule(std::make_unique<WCssTextRule>(".Wt-hide-scrollbar","scrollbar-width: none !important"), "Wt-hide-scrollbar");
+    }
+
     impl_->setPositionScheme(PositionScheme::Relative);
 
     headers_ = new WContainerWidget();
@@ -105,8 +110,8 @@ void WTableView::setup()
     layout->setContentsMargins(0, 0, 0, 0);
 
     headerContainer_ = new WContainerWidget();
-    headerContainer_->setStyleClass("Wt-header headerrh");
-    headerContainer_->setOverflow(Overflow::Hidden);
+    headerContainer_->setStyleClass("Wt-hide-scrollbar Wt-header headerrh");
+    headerContainer_->setOverflow(Overflow::Hidden, Orientation::Vertical);
     headerContainer_->addWidget(std::unique_ptr<WWidget>(headers_));
 
     canvas_ = new WContainerWidget();
@@ -188,7 +193,8 @@ void WTableView::setup()
 
     headerColumnsContainer_ = new WContainerWidget();
     headerColumnsContainer_->setPositionScheme(PositionScheme::Absolute);
-    headerColumnsContainer_->setOverflow(Overflow::Hidden);
+    headerColumnsContainer_->setOverflow(Overflow::Hidden, Orientation::Horizontal);
+    headerColumnsContainer_->addStyleClass("Wt-hide-scrollbar");
     headerColumnsContainer_->addWidget
       (std::unique_ptr<WWidget>(headerColumnsCanvas_));
     headerColumnsContainer_->hide();
@@ -845,6 +851,12 @@ void WTableView::defineJavaScript()
     /* Two-lines needed for WT_PORT */
     EventSignalBase& ccScrolled = contentsContainer_->scrolled();
     connectObjJS(ccScrolled, "onContentsContainerScroll");
+
+    EventSignalBase& hcScrolled = headerContainer_->scrolled();
+    connectObjJS(hcScrolled, "onHeaderContainerScroll");
+
+    EventSignalBase& hccScrolled = headerColumnsContainer_->scrolled();
+    connectObjJS(hccScrolled, "onHeaderColumnsContainerScroll");
 
     EventSignalBase& cKeyDown = canvas_->keyWentDown();
     connectObjJS(cKeyDown, "onkeydown");

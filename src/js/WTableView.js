@@ -101,6 +101,22 @@ WT_DECLARE_WT_MEMBER(
       maybeEmitScrolled();
     };
 
+    this.onHeaderContainerScroll = function() {
+      scrollLeft =
+        contentsContainer.scrollLeft =
+          headerContainer.scrollLeft;
+      maybeEmitScrolled();
+    };
+
+    this.onHeaderColumnsContainerScroll = function() {
+      const headerColumnsContainerEl = WT.getElement(headerColumnsContainerId);
+
+      scrollTop =
+        contentsContainer.scrollTop =
+          headerColumnsContainerEl.scrollTop;
+      maybeEmitScrolled();
+    };
+
     contentsContainer.wtResize = function(o, _w, _h, _setSize) {
       let callOnscroll = false;
 
