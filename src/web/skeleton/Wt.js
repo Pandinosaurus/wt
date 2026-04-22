@@ -4132,18 +4132,23 @@ window._$_APP_CLASS_$_ = new (function() {
     }
   }
 
-  let firstCall = true;
   let globalEventsFunctions = null;
+  let currentGlobalDomId = null;
   const keyEvents = ["keydown", "keyup", "keypress"];
 
   function updateGlobal(id) {
-    firstCall = false;
+    if (typeof id === UNDEFINED) {
+      id = currentGlobalDomId;
+    }
+
     let domId;
     if (id === null) {
       domId = document.querySelector(".Wt-domRoot").id;
     } else {
       domId = id;
     }
+
+    currentGlobalDomId = domId;
 
     for (let i = 0; i < keyEvents.length; ++i) {
       const elemEvents = globalEventsFunctions ? globalEventsFunctions[domId] : null;
@@ -4187,11 +4192,11 @@ window._$_APP_CLASS_$_ = new (function() {
     }
   }
 
+  let updateGlobalScheduled = false;
+
   function bindGlobal(event, id, f) {
-    let init = false;
     if (!globalEventsFunctions) {
       globalEventsFunctions = {};
-      init = true;
     }
 
     // Saves the event functions
@@ -4200,11 +4205,12 @@ window._$_APP_CLASS_$_ = new (function() {
     }
 
     globalEventsFunctions[id][event] = f;
-    if (init) {
+
+    if (!updateGlobalScheduled) {
+      updateGlobalScheduled = true;
       setTimeout(function() {
-        if (firstCall) {
-          updateGlobal(null);
-        }
+        updateGlobal();
+        updateGlobalScheduled = false;
       }, 0);
     }
   }
