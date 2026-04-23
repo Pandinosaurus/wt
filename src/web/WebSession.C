@@ -2988,16 +2988,17 @@ void WebSession::propagateFormValues(const WEvent& e, const std::string& se)
       // FIXME: reenable isVisible() check once we've fixed all of the regressions
       if (w && (!w->isEnabled()/* || !w->isVisible()*/))
         continue; // Do not update form data of a disabled or invisible widget
-      obj->setFormData(getFormData(request, se + formName));
+      obj->setFormData(getFormData(request, se, formName));
     } else
       obj->setRequestTooLarge(request.postDataExceeded());
   }
 }
 
 const Http::ParameterValues& WebSession::getFormParamValues(const WebRequest& request,
+                                                            const std::string& se,
                                                             const std::string& name)
 {
-  const Http::ParameterValues* requestParam = &(request.getParameterValues(name));
+  const Http::ParameterValues* requestParam = &(request.getParameterValues(se + name));
   Configuration& conf = controller_->configuration();
 
   if (!Utils::isEmpty(*requestParam)) {
@@ -3020,12 +3021,13 @@ const Http::ParameterValues& WebSession::getFormParamValues(const WebRequest& re
 }
 
 WObject::FormData WebSession::getFormData(const WebRequest& request,
+                                          const std::string& se,
                                           const std::string& name)
 {
   std::vector<Http::UploadedFile> files;
   Utils::find(request.uploadedFiles(), name, files);
 
-  const Http::ParameterValues& paramValues = getFormParamValues(request, name);
+  const Http::ParameterValues& paramValues = getFormParamValues(request, se, name);
 
   return WObject::FormData(paramValues, files);
 }

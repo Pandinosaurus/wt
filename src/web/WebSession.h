@@ -364,10 +364,12 @@ private:
                                 bool checkExposed) const;
 
   const Http::ParameterValues& getFormParamValues(const WebRequest& request,
+                                                  const std::string& se,
                                                   const std::string& name);
 
   WObject::FormData getFormData(const WebRequest& request,
-                                       const std::string& name);
+                                const std::string& se,
+                                const std::string& name);
 
   bool inFormDataCache(const std::string& name) const;
 
