@@ -20,7 +20,7 @@ newer version of Wt. It lists changes in the library that may break
 the way you build Wt, the way you configure Wt or the Wt API and
 behaviour.
 
-<h2>Release 4.13.2 (TBD)</h2>
+<h2>Release 4.13.2 (May 7, 2026)</h2>
 
 <p>Wt 4.13.2 is a patch release that addresses the following issues:</p>
 
@@ -34,6 +34,12 @@ behaviour.
     <a href="https://redmine.emweb.be/issues/14469" target="_blank">Issue #14469</a>:
     fixed
     <a href="classWt_1_1WGroupBox.html" target="_blank">WGroupBox</a> being unable to add or insert widgets.
+  </li>
+  <li>
+    <a href="https://redmine.emweb.be/issues/14482" target="_blank">Issue #14482</a>:
+    fixed
+    <a href="classWt_1_1WApplication.html#a1918508a02889373a9e1fc1d872f2753" target="_blank">WApplication::focusedWidget()</a>
+    returning nullptr when the focused widget was inside of a popup.
   </li>
   <li>
     <a href="https://redmine.emweb.be/issues/14488" target="_blank">Issue #14488</a>:
@@ -58,12 +64,6 @@ behaviour.
     <a href="https://redmine.emweb.be/issues/11704" target="_blank">Issue #11704</a>
     fixed Wt not being able to dynamically link against libharu versions 2.4.2 and higher on Windows.
     Additionally, the version of libharu bundled with Wt binary releases on Windows has been updated from 2.3.0 to 2.4.6.
-  </li>
-  <li>
-    <a href="https://redmine.emweb.be/issues/14482" target="_blank">Issue #14482</a>:
-    fixed
-    <a href="classWt_1_1WApplication.html#a1918508a02889373a9e1fc1d872f2753" target="_blank">WApplication::focusedWidget()</a>
-    returning nullptr when the focused widget was inside of a popup.
   </li>
 </ul>
 
